@@ -26,7 +26,7 @@ gulp.src("./templates/*.mustache")
 
 ### mustache(view)
 
-#### options
+#### view
 Type: `hash`
 Default: `undefined`
 
