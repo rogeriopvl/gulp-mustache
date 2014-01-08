@@ -1,6 +1,6 @@
 {
   "name": "gulp-mustache",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A plugin for Gulp that renders mustache templates into html",
   "keywords": [
     "gulpplugin",
@@ -24,12 +24,12 @@
   },
   "dependencies": {
     "event-stream": "*",
-    "mustache": "~0.8.1"
+    "mustache": "~0.8.1",
+    "gulp-util": "~2.2.6"
   },
   "devDependencies": {
     "mocha": "~1.14.0",
-    "should": "~2.1.0",
-    "gulp-util": "~2.2.0"
+    "should": "~2.1.0"
   },
   "engines": {
     "node": ">=0.8.0",
