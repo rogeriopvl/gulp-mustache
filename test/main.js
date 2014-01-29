@@ -2,7 +2,8 @@
 'use strict';
 
 var fs = require('fs'),
-should = require('should');
+should = require('should'),
+path = require('path');
 require('mocha');
 
 var gutil = require('gulp-util'),
@@ -43,6 +44,36 @@ describe('gulp-mustache', function () {
         });
 
         stream.write(srcFile);
+        stream.end();
+    });
+
+    it('should produce output file with correct chosen extension', function (done) {
+
+        var srcFile = new gutil.File({
+            path: 'test/fixtures/ok.mustache',
+            cwd: 'test/',
+            base: 'test/fixtures',
+            contents: fs.readFileSync('test/fixtures/ok.mustache')
+        });
+
+        var stream = mustache({ title: 'gulp-mustache' }, { extension: '.txt' });
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function (newFile) {
+
+            should.exist(newFile);
+            should.exist(newFile.contents);
+
+            String(newFile.contents).should.equal(String(expectedFile.contents));
+            done();
+        });
+
+        stream.write(srcFile);
+        String(path.extname(srcFile.path)).should.equal('.txt');
         stream.end();
     });
 

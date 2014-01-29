@@ -24,13 +24,23 @@ gulp.src("./templates/*.mustache")
 
 ## API
 
-### mustache(view)
+### mustache(view, options)
 
 #### view
 Type: `hash`
 Default: `undefined`
 
 The view object, containing all template variables as keys.
+
+#### options
+Type: `hash`
+Default: `{ extension: '.html' }`
+
+The options object to configure the plugin.
+
+##### options.extension
+Type: `string`
+Default: `.html`
 
 
 ## License
