@@ -29,17 +29,13 @@ as a third argument to the call to `mustache()` like so:
 gulp.src("./templates/*.mustache")
 	.pipe(mustache({
 		msg: "Hello Gulp!",
-    nested_value: "I am nested.",
-    another_value: "1 2 3"
-	},
-  {},
-  {
-    some_inner_partial: "<p>{{nested_value}}</p>",
-    another_partial: "<div>{{another_value}}</div>"
-  }))
-	.pipe(gulp.dest("./dist"));
+		nested_value: "I am nested.",
+		another_value: "1 2 3"
+	},{},{
+		some_inner_partial: "<p>{{nested_value}}</p>",
+		another_partial: "<div>{{another_value}}</div>"
+	})).pipe(gulp.dest("./dist"));
 ```
-
 
 ## API
 
