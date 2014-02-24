@@ -22,9 +22,24 @@ gulp.src("./templates/*.mustache")
 	.pipe(gulp.dest("./dist"));
 ```
 
+You may also pass in an object representing mustache partials and their contents
+as a third argument to the call to `mustache()` like so:
+
+```javascript
+gulp.src("./templates/*.mustache")
+	.pipe(mustache({
+		msg: "Hello Gulp!",
+		nested_value: "I am nested.",
+		another_value: "1 2 3"
+	},{},{
+		some_inner_partial: "<p>{{nested_value}}</p>",
+		another_partial: "<div>{{another_value}}</div>"
+	})).pipe(gulp.dest("./dist"));
+```
+
 ## API
 
-### mustache(view, options)
+### mustache(view, options, partials)
 
 #### view
 Type: `hash`
@@ -42,6 +57,11 @@ The options object to configure the plugin.
 Type: `string`
 Default: `.html`
 
+#### partials
+Type: `hash`
+Default: `{}`
+
+An optional object of mustache partial strings. See [mustache.js](https://github.com/janl/mustache.js/) for details on partials in mustache.
 
 ## License
 
