@@ -1,6 +1,6 @@
 'use strict';
 
-var es = require('event-stream');
+var through = require('through2');
 var gutil = require('gulp-util');
 var mustache = require('mustache');
 var fs = require('fs');
@@ -21,12 +21,29 @@ module.exports = function (view, options, partials) {
         }
     }
 
-    return es.map(function (file, cb) {
-        if (viewError) {
-            return cb(new Error(viewError));
+    return through.obj(function (file, enc, cb) {
+        if (file.isNull()) {
+            this.push(file);
+            return cb();
         }
+
+        if (file.isStream()) {
+            this.emit(
+                'error',
+                new gutil.PluginError('gulp-mustache', 'Streaming not supported')
+            );
+        }
+
+        if (viewError) {
+            this.emit(
+                'error',
+                new gutil.PluginError('gulp-mustache', viewError.toString())
+            );
+        }
+
         file.contents = new Buffer(mustache.render(file.contents.toString(), view, partials));
         file.path = gutil.replaceExtension(file.path, options.extension);
-        cb(null, file);
+        this.push(file);
+        cb();
     });
 };
