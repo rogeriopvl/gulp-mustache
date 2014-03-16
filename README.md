@@ -45,7 +45,7 @@ gulp.src("./templates/*.mustache")
 Type: `hash` or `string`
 Default: `undefined`
 
-The view object, containing all template variables as keys. If you pass a `string` it will be parsed as JSON into an object.
+The view object, containing all template variables as keys. If you pass a `string` it will be used as the path to a JSON file containing view variables.
 
 #### options
 Type: `hash`
