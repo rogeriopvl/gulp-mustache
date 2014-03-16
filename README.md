@@ -42,10 +42,10 @@ gulp.src("./templates/*.mustache")
 ### mustache(view, options, partials)
 
 #### view
-Type: `hash`
+Type: `hash` or `string`
 Default: `undefined`
 
-The view object, containing all template variables as keys.
+The view object, containing all template variables as keys. If you pass a `string` it will be parsed as JSON into an object.
 
 #### options
 Type: `hash`
