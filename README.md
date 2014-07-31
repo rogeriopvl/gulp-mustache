@@ -49,17 +49,17 @@ The view object, containing all template variables as keys. If you pass a `strin
 
 #### options
 Type: `hash`
-Default: `{ extension: '.html' }`
+Default: `{ }`
 
 The options object to configure the plugin.
 
 ##### options.extension
 Type: `string`
-Default: `.html`
+Default: the extension of the current file
 
 #### partials
 Type: `hash`
-Default: `{}`
+Default: `{ }`
 
 An optional object of mustache partial strings. See [mustache.js](https://github.com/janl/mustache.js/) for details on partials in mustache.
 

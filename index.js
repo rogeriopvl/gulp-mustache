@@ -7,7 +7,6 @@ var fs = require('fs');
 
 module.exports = function (view, options, partials) {
     options = options || {};
-    options.extension = options.extension || '.html';
     partials = partials || {};
 
     var viewError = null;
@@ -42,7 +41,9 @@ module.exports = function (view, options, partials) {
         }
 
         file.contents = new Buffer(mustache.render(file.contents.toString(), view, partials));
-        file.path = gutil.replaceExtension(file.path, options.extension);
+        if (typeof options.extension === 'string') {
+            file.path = gutil.replaceExtension(file.path, options.extension);
+        }
         this.push(file);
         cb();
     });
