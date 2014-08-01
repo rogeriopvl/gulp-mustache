@@ -23,9 +23,9 @@
     "test": "mocha"
   },
   "dependencies": {
-    "mustache": "~0.8.1",
-    "gulp-util": "~2.2.6",
-    "through2": "^0.4.1"
+    "gulp-util": "^3.0.0",
+    "mustache": "^0.8.2",
+    "through2": "^0.5.1"
   },
   "devDependencies": {
     "mocha": "~1.14.0",
