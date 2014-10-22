@@ -23,13 +23,13 @@
     "test": "mocha"
   },
   "dependencies": {
-    "gulp-util": "^3.0.0",
+    "gulp-util": "^3.0.1",
     "mustache": "^0.8.2",
-    "through2": "^0.5.1"
+    "through2": "^1.1.1"
   },
   "devDependencies": {
-    "mocha": "~1.14.0",
-    "should": "~2.1.0"
+    "mocha": "^2.0.0",
+    "should": "^4.1.0"
   },
   "engines": {
     "npm": ">=1.2.10"
