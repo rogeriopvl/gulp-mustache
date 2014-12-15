@@ -47,6 +47,8 @@ Default: `undefined`
 
 The view object, containing all template variables as keys. If you pass a `string` it will be used as the path to a JSON file containing view variables.
 
+As of `v1.0.1`, `file.data` is supported as a way of passing data into mustache. See [this](https://github.com/colynb/gulp-data#note-to-gulp-plugin-authors).
+
 #### options
 Type: `hash`
 Default: `{ }`
