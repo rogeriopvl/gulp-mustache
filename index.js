@@ -40,7 +40,7 @@ module.exports = function (view, options, partials) {
             );
         }
 
-        file.contents = new Buffer(mustache.render(file.contents.toString(), view, partials));
+        file.contents = new Buffer(mustache.render(file.contents.toString(), file.data || view, partials));
         if (typeof options.extension === 'string') {
             file.path = gutil.replaceExtension(file.path, options.extension);
         }
