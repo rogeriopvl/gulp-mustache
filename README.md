@@ -37,6 +37,16 @@ gulp.src("./templates/*.mustache")
 	})).pipe(gulp.dest("./dist"));
 ```
 
+## Partials loaded from disk
+
+[Mustache partials](https://mustache.github.io/mustache.5.html#Partials) not given in the `partials` argument will be loaded from disk, relative from the file currently being processed:
+
+```
+{{> ../partials/head }}
+```
+
+This will find a `head.mustache` in the partials directory next to the current file's directory. Partials loading is recursive.
+
 ## API
 
 ### mustache(view, options, partials)
