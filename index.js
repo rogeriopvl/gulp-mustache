@@ -69,11 +69,19 @@ module.exports = function (view, options, partials) {
         while (partialMatch = partialRegexp.exec(template)) {
             var partialName = partialMatch[1];
 
-            if (!partials[partialName]) {
-                var partialPath = path.resolve(templateDir, partialName + '.mustache');
-                var partial = fs.readFileSync(partialPath, 'utf8');
-                partials[partialName] = partial;
-                loadPartials(partial, partialPath);
+            if (!partials[partialName])
+            {
+                try
+                {
+                    var partialPath = path.resolve(templateDir, partialName + '.mustache');
+                    var partial = fs.readFileSync(partialPath, 'utf8');
+                    partials[partialName] = partial;
+                    loadPartials(partial, partialPath);
+                }
+                catch (ex)
+                {
+                    console.log("Unable to load partial file: " + partialPath);
+                }
             }
         }
     }
