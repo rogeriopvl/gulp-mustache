@@ -80,7 +80,7 @@ module.exports = function (view, options, partials) {
                 }
                 catch (ex)
                 {
-                    console.log("Unable to load partial file: " + partialPath);
+                    gutil.log("Unable to load partial file: " + partialPath);
                 }
             }
         }
