@@ -69,18 +69,17 @@ module.exports = function (view, options, partials) {
         while (partialMatch = partialRegexp.exec(template)) {
             var partialName = partialMatch[1];
 
-            if (!partials[partialName])
-            {
-                try
-                {
+            if (!partials[partialName]) {
+                try {
                     var partialPath = path.resolve(templateDir, partialName + '.mustache');
                     var partial = fs.readFileSync(partialPath, 'utf8');
                     partials[partialName] = partial;
                     loadPartials(partial, partialPath);
-                }
-                catch (ex)
-                {
-                    gutil.log("Unable to load partial file: " + partialPath);
+                } catch (ex) {
+                     this.emit(
+                        'error',
+                        new gutil.PluginError('gulp-mustache', "Unable to load partial file: " + partialPath);
+                    );
                 }
             }
         }
