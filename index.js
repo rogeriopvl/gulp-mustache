@@ -5,6 +5,7 @@ var gutil = require('gulp-util');
 var mustache = require('mustache');
 var fs = require('fs');
 var path = require('path');
+var stripbom = require("strip-bom");
 
 module.exports = function (view, options, partials) {
     options = options || {};
@@ -43,7 +44,7 @@ module.exports = function (view, options, partials) {
 
         var template = file.contents.toString();
         try {
-            loadPartials(template, file.path);
+            loadPartials.call(this, template, file.path);
         } catch (e) {
             this.emit(
                 'error',
@@ -71,10 +72,12 @@ module.exports = function (view, options, partials) {
 
             if (!partials[partialName]) {
                 try {
-                    var partialPath = path.resolve(templateDir, partialName + '.mustache');
-                    var partial = fs.readFileSync(partialPath, 'utf8');
+                    var suffix = (options.extension || '.mustache');
+                        suffix = (suffix.charAt(0) == "." ? suffix : "." + suffix);
+                    var partialPath = path.resolve(templateDir, partialName + suffix);
+                    var partial = stripbom(fs.readFileSync(partialPath, 'utf8'));
                     partials[partialName] = partial;
-                    loadPartials(partial, partialPath);
+                    loadPartials.call(this, partial, partialPath);
                 } catch (ex) {
                      this.emit(
                         'error',
