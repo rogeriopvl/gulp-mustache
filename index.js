@@ -72,9 +72,8 @@ module.exports = function (view, options, partials) {
 
             if (!partials[partialName]) {
                 try {
-                    var suffix = (options.extension || '.mustache');
-                        suffix = (suffix.charAt(0) == "." ? suffix : "." + suffix);
-                    var partialPath = path.resolve(templateDir, partialName + suffix);
+                    var extension = (typeof options.extension == "string" ? (options.extension || ".mustache") : "");
+                    var partialPath = path.resolve(templateDir, partialName + extension);
                     var partial = stripbom(fs.readFileSync(partialPath, 'utf8'));
                     partials[partialName] = partial;
                     loadPartials.call(this, partial, partialPath);
