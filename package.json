@@ -25,7 +25,8 @@
   "dependencies": {
     "gulp-util": "3.0.7",
     "mustache": "2.2.0",
-    "through2": "2.0.0"
+    "through2": "2.0.0",
+    "strip-bom": "2.0.0"
   },
   "devDependencies": {
     "mocha": "2.3.4",
