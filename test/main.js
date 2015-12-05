@@ -57,7 +57,11 @@ describe('gulp-mustache', function () {
         var srcFile = makeFixtureFile('test/fixtures/okWithPartial.mustache');
         var partialFile = makeFixtureFile('test/fixtures/partial.mustache');
 
-        var stream = mustache({ title: 'gulp-mustache', nested: 'I am nested' }, {}, { partial: partialFile.contents.toString() });
+        var stream = mustache(
+            { title: 'gulp-mustache', nested: 'I am nested' },
+            {},
+            { partial: partialFile.contents.toString() }
+        );
 
         stream.on('error', function (err) {
             should.exist(err);
@@ -143,6 +147,26 @@ describe('gulp-mustache', function () {
 
         stream.on('error', function (err) {
             should.exist(err);
+            done();
+        });
+
+        stream.write(srcFile);
+        stream.end();
+    });
+
+    it('should emit partial not found error when partial is missing', function (done) {
+        var srcFile = new gutil.File({
+            path: 'test/fixtures/missing-partial.mustache',
+            cwd: 'test/',
+            base: 'test/fixtures',
+            contents: fs.readFileSync('test/fixtures/missing-partial.mustache')
+        });
+
+        var stream = mustache({});
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            should(err.message.indexOf('Unable to load partial')).equal(0);
             done();
         });
 

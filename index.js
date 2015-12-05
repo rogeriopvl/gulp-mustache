@@ -43,7 +43,7 @@ module.exports = function (view, options, partials) {
 
         var template = file.contents.toString();
         try {
-            loadPartials(template, file.path);
+            loadPartials.call(this, template, file.path);
         } catch (e) {
             this.emit(
                 'error',
@@ -78,7 +78,11 @@ module.exports = function (view, options, partials) {
                 } catch (ex) {
                      this.emit(
                         'error',
-                        new gutil.PluginError('gulp-mustache', "Unable to load partial file: " + partialPath));
+                        new gutil.PluginError(
+                            'gulp-mustache',
+                            'Unable to load partial file: ' + partialPath
+                        )
+                     );
                 }
             }
         }
