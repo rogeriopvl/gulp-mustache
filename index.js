@@ -97,7 +97,8 @@ module.exports = function (view, options, partials) {
                         else {
                             // or check if `partial + options.extension` is exists.
                             // e.g. 
-                            //   if `options.extension` equals ".html": `{{> ./path/to/partial }}` => `{{> ./path/to/partial.html }}`
+                            //   if `options.extension` equals ".html": 
+                            //   `{{> ./path/to/partial }}` => `{{> ./path/to/partial.html }}`
                             if ( typeof options.extension == "string" ) {
                                 partialPath = path.resolve(templateDir, partialName + options.extension);
                                 
@@ -106,8 +107,9 @@ module.exports = function (view, options, partials) {
                                 }
                             }
 
-                            // when `options.extension` is not a string or `partialName + options.extension`
-                            // does not exists. try use `.mustache` extension to load `partial` file.
+                            // when `options.extension` is not a string or 
+                            // `partialName + options.extension` does not exists. 
+                            // try use `.mustache` extension to load `partial` file.
                             if ( partial === null ) {
                                 partialPath = path.resolve(templateDir, partialName + ".mustache");
                                 partial = fs.readFileSync(partialPath, 'utf8');
@@ -122,8 +124,10 @@ module.exports = function (view, options, partials) {
                         'error',
                         new gutil.PluginError(
                             'gulp-mustache',
-                            // use `ex.message` property instead of `partialPath`, because `this.emit()` seems not a sync method.
-                            // also the `ex.message` property provide more details about error information.
+                            // use `ex.message` property instead of `partialPath`, 
+                            // because `this.emit()` seems not a sync method.
+                            // also the `ex.message` property provide more details 
+                            // about error information.
                             'Unable to load partial file: ' + ex.message/*partialPath*/
                         )
                      );
