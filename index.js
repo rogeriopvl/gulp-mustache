@@ -100,7 +100,10 @@ module.exports = function (view, options, partials) {
                             //   if `options.extension` equals ".html": 
                             //   `{{> ./path/to/partial }}` => `{{> ./path/to/partial.html }}`
                             if ( typeof options.extension == "string" ) {
-                                partialPath = path.resolve(templateDir, partialName + options.extension);
+                                partialPath = path.resolve(
+                                    templateDir, 
+                                    partialName + options.extension
+                                );
                                 
                                 if ( fs.existsSync(partialPath) ) {
                                     partial = fs.readFileSync(partialPath, 'utf8');
