@@ -12,6 +12,10 @@ module.exports = function (view, options, partials) {
 
     var viewError = null;
 
+    if (options.tags) {
+        mustache.tags = options.tags;
+    }
+
     // if view is string, interpret as path to json filename
     if (typeof view === 'string') {
         try {
@@ -63,7 +67,9 @@ module.exports = function (view, options, partials) {
     function loadPartials(template, templatePath) {
         var templateDir = path.dirname(templatePath);
 
-        var partialRegexp = /{{>\s*(\S+)\s*}}/g;
+        var partialRegexp = new RegExp(
+            mustache.tags[0] + '>\\s*(\\S+)\\s*' + mustache.tags[1], 'g'
+        );
 
         var partialMatch;
         while (partialMatch = partialRegexp.exec(template)) {

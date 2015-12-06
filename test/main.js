@@ -174,23 +174,28 @@ describe('gulp-mustache', function () {
         stream.end();
     });
 
-    // it('should throw error when syntax is incorrect', function (done) {
+    it('should allow the change of mustache delimiters', function (done) {
+        var expectedFile = makeExpectedFile('test/expected/output.html');
+        var srcFile = makeFixtureFile('test/fixtures/custom-tags.mustache');
+        var stream = mustache(
+            { title: 'gulp-mustache' },
+            { tags: ['{{m', 'm}}'] }
+        );
 
-    //     var srcFile = new gutil.File({
-    //         path: 'test/fixtures/nok.mustache',
-    //         cwd: 'test/',
-    //         base: 'test/fixtures',
-    //         contents: fs.readFileSync('test/fixtures/nok.mustache')
-    //     });
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
 
-    //     var stream = mustache({ title: 'gulp-mustache' });
+        stream.on('data', function (newFile) {
 
-    //     stream.on('error', function (err) {
-    //         should.exist(err);
-    //         done();
-    //     });
+            should.exist(newFile);
+            should.exist(newFile.contents);
+            String(newFile.contents).should.equal(String(expectedFile.contents));
+            done();
+        });
 
-    //     stream.write(srcFile);
-    //     stream.end();
-    // });
+        stream.write(srcFile);
+        stream.end();
+    });
 });
