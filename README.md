@@ -69,6 +69,18 @@ The options object to configure the plugin.
 Type: `string`
 Default: the extension of the current file
 
+##### options.tags
+Type `Array`
+Default `undefined`
+
+Pass custom mustache delimiters. This must be an Array of strings where the first item is the opening tag and the second the closing tag.
+
+Example:
+
+```javascript
+['{{custom', 'custom}}']
+```
+
 #### partials
 Type: `hash`
 Default: `{ }`
