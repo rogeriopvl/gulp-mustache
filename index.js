@@ -98,7 +98,8 @@ module.exports = function (view, options, partials) {
                             // or check if `partial + options.extension` is exists.
                             // e.g. 
                             //   if `options.extension` equals ".html": 
-                            //   `{{> ./path/to/partial }}` => `{{> ./path/to/partial.html }}`
+                            //   the `{{> ./path/to/partial }}` will load 
+                            //   `./path/to/partial.html`.
                             if ( typeof options.extension == "string" ) {
                                 partialPath = path.resolve(
                                     templateDir, 
@@ -114,7 +115,11 @@ module.exports = function (view, options, partials) {
                             // `partialName + options.extension` does not exists. 
                             // try use `.mustache` extension to load `partial` file.
                             if ( partial === null ) {
-                                partialPath = path.resolve(templateDir, partialName + ".mustache");
+                                partialPath = path.resolve(
+                                    templateDir, 
+                                    partialName + ".mustache"
+                                );
+
                                 partial = fs.readFileSync(partialPath, 'utf8');
                             }
                         }
