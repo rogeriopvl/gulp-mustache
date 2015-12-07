@@ -77,16 +77,72 @@ module.exports = function (view, options, partials) {
 
             if (!partials[partialName]) {
                 try {
-                    var partialPath = path.resolve(templateDir, partialName + '.mustache');
-                    var partial = fs.readFileSync(partialPath, 'utf8');
+                    var partialPath = null;
+                    var partial = null;
+
+                    // ignore `partial` with file extension. 
+                    // e.g. 
+                    //   1, `{{> ./path/to/partial.html }}`
+                    //   2, `{{> ./path/to/partial. }}`
+                    if ( path.extname(partialName) != "" ) {
+                        partialPath = path.resolve(templateDir, partialName);
+                        partial = fs.readFileSync(partialPath, 'utf8');
+                    }
+
+                    else {
+                        // ignore `partial` file is exists without file extension.
+                        // e.g. 
+                        //   1, `{{> ./path/to/partial }}` is exists.
+                        //   2, `{{> ./path/to/.partial }}` is exists.
+                        partialPath = path.resolve(templateDir, partialName);
+                        
+                        if ( fs.existsSync(partialPath) ) {
+                            partial = fs.readFileSync(partialPath, 'utf8');
+                        }
+
+                        else {
+                            // or check if `partial + options.extension` is exists.
+                            // e.g. 
+                            //   if `options.extension` equals ".html": 
+                            //   the `{{> ./path/to/partial }}` will load 
+                            //   `./path/to/partial.html`.
+                            if ( typeof options.extension == "string" ) {
+                                partialPath = path.resolve(
+                                    templateDir, 
+                                    partialName + options.extension
+                                );
+                                
+                                if ( fs.existsSync(partialPath) ) {
+                                    partial = fs.readFileSync(partialPath, 'utf8');
+                                }
+                            }
+
+                            // when `options.extension` is not a string or 
+                            // `partialName + options.extension` does not exists. 
+                            // try use `.mustache` extension to load `partial` file.
+                            if ( partial === null ) {
+                                partialPath = path.resolve(
+                                    templateDir, 
+                                    partialName + ".mustache"
+                                );
+
+                                partial = fs.readFileSync(partialPath, 'utf8');
+                            }
+                        }
+                    }
+
                     partials[partialName] = partial;
-                    loadPartials(partial, partialPath);
+                    loadPartials.call(this, partial, partialPath);
                 } catch (ex) {
                      this.emit(
                         'error',
                         new gutil.PluginError(
                             'gulp-mustache',
-                            'Unable to load partial file: ' + partialPath
+                            // use `ex.message` property instead of `partialPath`, 
+                            // because `this.emit()` seems not a sync method.
+                            // also the `ex.message` property provide more details 
+                            // about error information.
+                            'Unable to load partial file: ' + ex.message/*partialPath*/
                         )
                      );
                 }
