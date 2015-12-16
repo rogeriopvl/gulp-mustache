@@ -106,6 +106,20 @@ describe('gulp-mustache', function () {
         stream.end();
     });
 
+    it('should emit mustache errors', function (done) {
+        var srcFile = makeFixtureFile('test/fixtures/nok.mustache');
+
+        var stream = mustache({ title: 'gulp-mustache' });
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done();
+        });
+
+        stream.write(srcFile);
+        stream.end();
+    });
+
     it('should produce correct html output using json file', function (done) {
         var srcFile = new gutil.File({
             path: 'test/fixtures/ok.mustache',
