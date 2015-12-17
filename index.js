@@ -55,7 +55,17 @@ module.exports = function (view, options, partials) {
             );
         }
 
-        file.contents = new Buffer(mustache.render(template, file.data || view, partials));
+        try {
+            file.contents = new Buffer(
+                mustache.render(template, file.data || view, partials)
+            );
+        } catch (e) {
+            this.emit(
+                'error',
+                new gutil.PluginError('gulp-mustache', e.message)
+            );
+        }
+
         if (typeof options.extension === 'string') {
             file.path = gutil.replaceExtension(file.path, options.extension);
         }
