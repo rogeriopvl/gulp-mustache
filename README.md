@@ -25,6 +25,8 @@ gulp.src("./templates/*.mustache")
 You may also pass in an object representing mustache partials and their contents
 as a third argument to the call to `mustache()` like so:
 
+With key/value pairs:
+
 ```javascript
 gulp.src("./templates/*.mustache")
 	.pipe(mustache({
@@ -35,6 +37,13 @@ gulp.src("./templates/*.mustache")
 		some_inner_partial: "<p>{{nested_value}}</p>",
 		another_partial: "<div>{{another_value}}</div>"
 	})).pipe(gulp.dest("./dist"));
+```
+With a json file:
+
+```javascript
+gulp.src("./templates/*.mustache")
+	.pipe(mustache('your_json_file.json',{},{}))
+	.pipe(gulp.dest("./dist"));
 ```
 
 ## Partials loaded from disk
