@@ -160,3 +160,5 @@ module.exports = function (view, options, partials) {
         }
     }
 };
+
+module.exports.mustache = mustache;
