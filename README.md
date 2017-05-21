@@ -1,5 +1,7 @@
 # gulp-mustache [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/rogeriopvl/gulp-mustache.svg)](https://greenkeeper.io/)
+
 > mustache plugin for [gulp](https://github.com/wearefractal/gulp)
 
 ## Usage
