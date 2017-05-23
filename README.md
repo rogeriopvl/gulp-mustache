@@ -4,7 +4,7 @@
 
 > mustache plugin for [gulp](https://github.com/wearefractal/gulp)
 
-## Usage
+# Usage
 
 First, install `gulp-mustache` as a development dependency:
 
@@ -48,7 +48,7 @@ gulp.src("./templates/*.mustache")
 	.pipe(gulp.dest("./dist"));
 ```
 
-## Partials loaded from disk
+# Partials loaded from disk
 
 [Mustache partials](https://mustache.github.io/mustache.5.html#Partials) not given in the `partials` argument will be loaded from disk, relative from the file currently being processed:
 
@@ -58,29 +58,31 @@ gulp.src("./templates/*.mustache")
 
 This will find a `head.mustache` in the partials directory next to the current file's directory. Partials loading is recursive.
 
-## API
+# API
 
-### mustache(view, options, partials)
+## mustache(viewOrTeplate, options, partials)
 
-#### view
-Type: `hash` or `string`
+### viewOrTemplate
+Type: `object` or `string`
 Default: `undefined`
 
-The view object, containing all template variables as keys. If you pass a `string` it will be used as the path to a JSON file containing view variables.
+If you pass a path to a `.json` file, it will be interpreted as the view object. If you pass a literal object, it will be intepreted as the view object.
+
+If, however, you pass it a path to a file with any extension other than `.json` it will be interpreted as a template file. (Unless you set options.isView to true.) There is an example of this inverse behaviour below.
 
 As of `v1.0.1`, `file.data` is supported as a way of passing data into mustache. See [this](https://github.com/colynb/gulp-data#note-to-gulp-plugin-authors).
 
-#### options
-Type: `hash`
+### options
+Type: `object`
 Default: `{ }`
 
 The options object to configure the plugin.
 
-##### options.extension
+#### options.extension
 Type: `string`
 Default: the extension of the current file
 
-##### options.tags
+#### options.tags
 Type `Array`
 Default `undefined`
 
@@ -92,13 +94,59 @@ Example:
 ['{{custom', 'custom}}']
 ```
 
-#### partials
-Type: `hash`
+#### options.isView
+Type `bool`
+Default `false`
+
+If true, viewOrTemplate will be treated as a path to a JSON view regardless of file extension.
+
+### partials
+Type: `object`
 Default: `{ }`
 
 An optional object of mustache partial strings. See [mustache.js](https://github.com/janl/mustache.js/) for details on partials in mustache.
 
-## License
+## Examples
+
+`example.mustache`:
+```html
+<h1>{{title}}</h1>
+<p>{{content}}</p>
+```
+
+### Literal view object (passing a view directly)
+```js
+gulp.task('literal-view-object', function() {
+	return gulp.src('./*.mustache')
+		.pipe(mustache({
+			title: 'Example',
+			content: 'For every .mustache file in this directory, this will output a mirroring .html file using this view object.'
+		}, {extension: '.html'}))
+		.pipe(gulp.dest('./'));
+});
+```
+
+### Path to JSON view
+This does the same as above, but the view is stored in a JSON file instead of in a literal object
+```js
+gulp.task('view-json-path', function() {
+	return gulp.src('example.mustache')
+		.pipe(mustache('view.json', {extension: '.html'}))
+		.pipe(gulp.dest('./'));
+});
+```
+
+### Inverted behaviour
+This example takes each `.json` file in the current directory, and uses the same template for each. This is useful for, say, building a series of error pages with the same styles but just slightly different wording.
+```js
+gulp.task('template-path', function() {
+	return gulp.src('./*.json')
+		.pipe(mustache('example.mustache', {extension: '.html'}))
+		.pipe(gulp.dest('./'));
+});
+```
+
+# License
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
 
