@@ -6,24 +6,56 @@ var mustache = require('mustache');
 var fs = require('fs');
 var path = require('path');
 
-module.exports = function (view, options, partials) {
+//viewOrTemplate is either
+//  a view object
+//  a path to a view .json file (must end in .json, unless the options.isView flag is set)
+//  a path to a template (can have any file ext. other than .json)
+//options - object
+//  extension - file extension for the output
+//  tags - mustache tags, replaces ['{{', '}}'] with ['start-tag-here', 'end-tag-here']
+//  isView - bool, if true, viewOrTemplate is interpreted as a path to a view regardless of file extension
+//partials - refer to full gulp-mustache docs
+
+module.exports = function (viewOrTemplate, options, partials) {
     options = options || {};
     partials = partials || {};
-
-    var viewError = null;
 
     if (options.tags) {
         mustache.tags = options.tags;
     }
 
-    // if view is string, interpret as path to json filename
-    if (typeof view === 'string') {
+
+    var view,
+        template,
+        viewError = null;
+
+    //If the files which are piped in ( gulp.src('...') ) are mustache templates, this is true
+    var inputStreamIsTemplate = true;
+
+    if (typeof viewOrTemplate === 'object') {
+
+        //viewOrTemplate is a raw view object
+        view = viewOrTemplate;
+
+    } else if (typeof viewOrTemplate === 'string' && (viewOrTemplate.endsWith('.json') || options.isView)) {
+
+        //viewOrTemplate is a path to a JSON view file
         try {
-            view = JSON.parse(fs.readFileSync(view, 'utf8'));
+            view = JSON.parse(fs.readFileSync(viewOrTemplate, 'utf8'));
         } catch (e) {
             viewError = e;
         }
+
+    } else if (typeof viewOrTemplate === 'string') {
+
+        //viewOrTemplate is a path to a template
+        template = fs.readFileSync(viewOrTemplate, 'utf8');
+
+        //Meaning that the input files must be treated as views
+        inputStreamIsTemplate = false;
+
     }
+
 
     return through.obj(function (file, enc, cb) {
         if (file.isNull()) {
@@ -45,7 +77,19 @@ module.exports = function (view, options, partials) {
             );
         }
 
-        var template = file.contents.toString();
+        if (inputStreamIsTemplate) {
+            template = file.contents.toString();
+        } else {
+            try {
+                view = JSON.parse(file.contents.toString());
+            } catch (e) {
+                this.emit(
+                    'error',
+                    new gutil.PluginError('gulp-mustache', e.toString())
+                );
+            }
+        }
+
         try {
             loadPartials.call(this, template, file.path);
         } catch (e) {
@@ -60,14 +104,17 @@ module.exports = function (view, options, partials) {
                 mustache.render(template, file.data || view, partials)
             );
         } catch (e) {
-            this.emit(
-                'error',
-                new gutil.PluginError('gulp-mustache', e.message)
-            );
+            if (!viewError)
+                this.emit(
+                    'error',
+                    new gutil.PluginError('gulp-mustache', e.message)
+                );
         }
 
         if (typeof options.extension === 'string') {
             file.path = gutil.replaceExtension(file.path, options.extension);
+        } else if (inputStreamIsTemplate) {
+            file.path = gutil.replaceExtension(file.path, '.html');
         }
         this.push(file);
         cb();

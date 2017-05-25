@@ -212,4 +212,73 @@ describe('gulp-mustache', function () {
         stream.write(srcFile);
         stream.end();
     });
+
+    it('should produce correct html output when rendering a file using inverse behaviour', function (done) {
+
+        var expectedFile = makeExpectedFile('test/expected/output.html');
+        var srcFile = makeFixtureFile('test/fixtures/ok.json');
+        var stream = mustache('test/fixtures/ok.mustache');
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function (newFile) {
+
+            should.exist(newFile);
+            should.exist(newFile.contents);
+            String(newFile.contents).should.equal(String(expectedFile.contents));
+            done();
+        });
+
+        stream.write(srcFile);
+        stream.end();
+    });
+
+    it('should recognise an unusual file extension as json with isView flag', function (done) {
+
+        var expectedFile = makeExpectedFile('test/expected/output.html');
+        var srcFile = makeFixtureFile('test/fixtures/ok.mustache');
+        var stream = mustache('test/fixtures/ok-json.strange-extension', {isView: true});
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function (newFile) {
+
+            should.exist(newFile);
+            should.exist(newFile.contents);
+            String(newFile.contents).should.equal(String(expectedFile.contents));
+            done();
+        });
+
+        stream.write(srcFile);
+        stream.end();
+    });
+
+    it('should recognise an unusual file extension as a mustache template without isView flag', function (done) {
+
+        var expectedFile = makeExpectedFile('test/expected/output.html');
+        var srcFile = makeFixtureFile('test/fixtures/ok.json');
+        var stream = mustache('test/fixtures/ok-mustache.strange-extension');
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function (newFile) {
+
+            should.exist(newFile);
+            should.exist(newFile.contents);
+            String(newFile.contents).should.equal(String(expectedFile.contents));
+            done();
+        });
+
+        stream.write(srcFile);
+        stream.end();
+    });
 });
