@@ -88,17 +88,23 @@ Default `undefined`
 
 Pass custom mustache delimiters. This must be an Array of strings where the first item is the opening tag and the second the closing tag.
 
+Be careful though, as the tags are treated as regular expressions, so `['..', '..']` would match `ab dotMeansAnyCharacter cd` and `hj stuffHere kl`. If you want to use a literal dot `.` make sure to escape it (ie `['\.\.', '\.\.']`)
+
 Example:
 
 ```javascript
-['{{custom', 'custom}}']
+['[[custom--', '-custom]]']
+```
+And then:
+```html
+<h1>[[custom-- usingFancyNewDelimiters -custom]]
 ```
 
 #### options.isView
 Type `bool`
 Default `false`
 
-If true, viewOrTemplate will be treated as a path to a JSON view regardless of file extension.
+If true, `viewOrTemplate` will be treated as a path to a JSON view regardless of file extension. If false, any file extension other than `.json` passed like `.pipe(mustache('thing.unusual-file-extension')` will be interpreted as a mustache template.
 
 ### partials
 Type: `object`
@@ -137,7 +143,9 @@ gulp.task('view-json-path', function() {
 ```
 
 ### Inverted behaviour
-This example takes each `.json` file in the current directory, and uses the same template for each. This is useful for, say, building a series of error pages with the same styles but just slightly different wording.
+This example takes each `.json` file in the current directory, and uses the same template for each. This is useful for, say, building a series of full blog post HTML pages from compiled markdown HTML post content and an HTML template; ie the same template for multiple blog posts/views.
+
+Also note that if you pass a `.json` file to `.pipe(mustache(...))` it will be interpreted as JSON, but if you pass a file with any other file extension it will be interpreted as a mustache template. To avoid that look at `options.isView`.
 ```js
 gulp.task('template-path', function() {
 	return gulp.src('./*.json')
