@@ -1,0 +1,42 @@
+{
+  "name": "gulp-mustache",
+  "version": "2.3.0",
+  "description": "A plugin for Gulp that renders mustache templates into html",
+  "keywords": [
+    "gulpplugin",
+    "gulp",
+    "mustache"
+  ],
+  "homepage": "https://github.com/rogeriopvl/gulp-mustache",
+  "bugs": "https://github.com/rogeriopvl/gulp-mustache/issues",
+  "author": {
+    "name": "Rogério Vicente",
+    "email": "",
+    "url": "https://github.com/rogeriopvl"
+  },
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rogeriopvl/gulp-mustache.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.7",
+    "mustache": "^2.2.1",
+    "through2": "^2.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.0",
+    "should": "^11.1.0"
+  },
+  "engines": {
+    "npm": ">=1.2.10"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}
