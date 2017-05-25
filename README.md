@@ -145,6 +145,8 @@ gulp.task('template-path', function() {
 		.pipe(gulp.dest('./'));
 });
 ```
+## Development
+To run tests, use either `npm test` or `mocha` after running `npm install`, assuming mocha is installed.
 
 # License
 

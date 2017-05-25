@@ -14,7 +14,7 @@ var path = require('path');
 //  extension - file extension for the output
 //  tags - mustache tags, replaces ['{{', '}}'] with ['start-tag-here', 'end-tag-here']
 //  isView - bool, if true, viewOrTemplate is interpreted as a path to a view regardless of file extension
-//partials - refer to mustache API https://github.com/janl/mustache.js
+//partials - refer to full gulp-mustache docs
 
 module.exports = function (viewOrTemplate, options, partials) {
     options = options || {};
@@ -27,7 +27,7 @@ module.exports = function (viewOrTemplate, options, partials) {
 
     var view,
         template,
-        error = null;
+        viewError = null;
 
     //If the files which are piped in ( gulp.src('...') ) are mustache templates, this is true
     var inputStreamIsTemplate = true;
@@ -43,7 +43,7 @@ module.exports = function (viewOrTemplate, options, partials) {
         try {
             view = JSON.parse(fs.readFileSync(viewOrTemplate, 'utf8'));
         } catch (e) {
-            error = e;
+            viewError = e;
         }
 
     } else if (typeof viewOrTemplate === 'string') {
@@ -70,17 +70,25 @@ module.exports = function (viewOrTemplate, options, partials) {
             );
         }
 
-        if (error) {
+        if (viewError) {
             this.emit(
                 'error',
-                new gutil.PluginError('gulp-mustache', error.toString())
+                new gutil.PluginError('gulp-mustache', viewError.toString())
             );
         }
 
-        if (inputStreamIsTemplate)
+        if (inputStreamIsTemplate) {
             template = file.contents.toString();
-        else
-            view = JSON.parse(file.contents.toString());
+        } else {
+            try {
+                view = JSON.parse(file.contents.toString());
+            } catch (e) {
+                this.emit(
+                    'error',
+                    new gutil.PluginError('gulp-mustache', e.toString())
+                );
+            }
+        }
 
         try {
             loadPartials.call(this, template, file.path);
@@ -96,10 +104,11 @@ module.exports = function (viewOrTemplate, options, partials) {
                 mustache.render(template, file.data || view, partials)
             );
         } catch (e) {
-            this.emit(
-                'error',
-                new gutil.PluginError('gulp-mustache', e.message)
-            );
+            if (!viewError)
+                this.emit(
+                    'error',
+                    new gutil.PluginError('gulp-mustache', e.message)
+                );
         }
 
         if (typeof options.extension === 'string') {
