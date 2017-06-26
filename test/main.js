@@ -212,4 +212,59 @@ describe('gulp-mustache', function () {
         stream.write(srcFile);
         stream.end();
     });
+
+    it('should allow the change of mustache delimiters without regex escaping', function (done) {
+        var expectedFile = makeExpectedFile('test/expected/output.html');
+        var srcFile = makeFixtureFile('test/fixtures/custom-tags-square-bracket.mustache');
+        var stream = mustache(
+            { title: 'gulp-mustache' },
+            { tags: ['[[', ']]'] }
+        );
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function (newFile) {
+
+            should.exist(newFile);
+            should.exist(newFile.contents);
+            String(newFile.contents).should.equal(String(expectedFile.contents));
+            done();
+        });
+
+        stream.write(srcFile);
+        stream.end();
+    });
+
+
+    it('should produce correct html output when rendering included partials and custom mustache delimiters without regex escaping', function (done) {
+
+        var expectedFile = makeExpectedFile('test/expected/outputWithPartial.html');
+        var srcFile = makeFixtureFile('test/fixtures/okWithPartial-custom-tags-square-bracket.mustache');
+        var partialFile = makeFixtureFile('test/fixtures/partial-custom-tags-square-bracket.mustache');
+
+        var stream = mustache(
+            { title: 'gulp-mustache', nested: 'I am nested' },
+            { tags: ['[[', ']]'] },
+            { partial: partialFile.contents.toString() }
+        );
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function (newFile) {
+
+            should.exist(newFile);
+            should.exist(newFile.contents);
+            String(newFile.contents).should.equal(String(expectedFile.contents));
+            done();
+        });
+
+        stream.write(srcFile);
+        stream.end();
+    });
 });

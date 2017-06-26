@@ -5,6 +5,7 @@ var gutil = require('gulp-util');
 var mustache = require('mustache');
 var fs = require('fs');
 var path = require('path');
+var escapeRegex = require('escape-string-regexp');
 
 module.exports = function (view, options, partials) {
     options = options || {};
@@ -78,7 +79,7 @@ module.exports = function (view, options, partials) {
         var templateDir = path.dirname(templatePath);
 
         var partialRegexp = new RegExp(
-            mustache.tags[0] + '>\\s*(\\S+)\\s*' + mustache.tags[1], 'g'
+            escapeRegex(mustache.tags[0]) + '>\\s*(\\S+)\\s*' + escapeRegex(mustache.tags[1]), 'g'
         );
 
         var partialMatch;
