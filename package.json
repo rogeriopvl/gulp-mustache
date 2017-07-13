@@ -23,10 +23,10 @@
     "test": "mocha"
   },
   "dependencies": {
-    "gulp-util": "^3.0.7",
-    "mustache": "^2.2.1",
-    "through2": "^2.0.0",
-    "escape-string-regexp": "^1.0.5"
+    "escape-string-regexp": "^1.0.5",
+    "gulp-util": "^3.0.8",
+    "mustache": "^2.3.0",
+    "through2": "^2.0.3"
   },
   "devDependencies": {
     "mocha": "^3.4.0",
