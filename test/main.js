@@ -1,16 +1,17 @@
 /*global describe, it*/
 'use strict';
 
-var fs = require('fs'),
-should = require('should'),
-path = require('path');
 require('mocha');
 
-var gutil = require('gulp-util'),
-mustache = require('../');
+var fs = require('fs');
+var should = require('should');
+var path = require('path');
+var Vinyl = require('vinyl');
+
+var mustache = require('../');
 
 var makeFile = function (path, base) {
-    return new gutil.File({
+    return new Vinyl({
         path: path,
         cwd: 'test/',
         base: base,
@@ -121,7 +122,7 @@ describe('gulp-mustache', function () {
     });
 
     it('should produce correct html output using json file', function (done) {
-        var srcFile = new gutil.File({
+        var srcFile = new Vinyl({
             path: 'test/fixtures/ok.mustache',
             cwd: 'test/',
             base: 'test/fixtures',
@@ -150,7 +151,7 @@ describe('gulp-mustache', function () {
     });
 
     it('should detect malformed json and emit error', function (done) {
-        var srcFile = new gutil.File({
+        var srcFile = new Vinyl({
             path: 'test/fixtures/ok.mustache',
             cwd: 'test/',
             base: 'test/fixtures',
@@ -169,7 +170,7 @@ describe('gulp-mustache', function () {
     });
 
     it('should emit partial not found error when partial is missing', function (done) {
-        var srcFile = new gutil.File({
+        var srcFile = new Vinyl({
             path: 'test/fixtures/missing-partial.mustache',
             cwd: 'test/',
             base: 'test/fixtures',

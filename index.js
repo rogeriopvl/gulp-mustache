@@ -1,7 +1,8 @@
 'use strict';
 
 var through = require('through2');
-var gutil = require('gulp-util');
+var PluginError = require('plugin-error')
+var replaceExtension = require('replace-ext')
 var mustache = require('mustache');
 var fs = require('fs');
 var path = require('path');
@@ -35,14 +36,14 @@ module.exports = function (view, options, partials) {
         if (file.isStream()) {
             this.emit(
                 'error',
-                new gutil.PluginError('gulp-mustache', 'Streaming not supported')
+                new PluginError('gulp-mustache', 'Streaming not supported')
             );
         }
 
         if (viewError) {
             this.emit(
                 'error',
-                new gutil.PluginError('gulp-mustache', viewError.toString())
+                new PluginError('gulp-mustache', viewError.toString())
             );
         }
 
@@ -52,7 +53,7 @@ module.exports = function (view, options, partials) {
         } catch (e) {
             this.emit(
                 'error',
-                new gutil.PluginError('gulp-mustache', e.message)
+                new PluginError('gulp-mustache', e.message)
             );
         }
 
@@ -63,12 +64,12 @@ module.exports = function (view, options, partials) {
         } catch (e) {
             this.emit(
                 'error',
-                new gutil.PluginError('gulp-mustache', e.message)
+                new PluginError('gulp-mustache', e.message)
             );
         }
 
         if (typeof options.extension === 'string') {
-            file.path = gutil.replaceExtension(file.path, options.extension);
+            file.path = replaceExtension(file.path, options.extension);
         }
         this.push(file);
         cb();
@@ -147,7 +148,7 @@ module.exports = function (view, options, partials) {
                 } catch (ex) {
                      this.emit(
                         'error',
-                        new gutil.PluginError(
+                        new PluginError(
                             'gulp-mustache',
                             // use `ex.message` property instead of `partialPath`,
                             // because `this.emit()` seems not a sync method.
