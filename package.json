@@ -24,13 +24,15 @@
   },
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
-    "gulp-util": "^3.0.8",
     "mustache": "^2.3.0",
+    "plugin-error": "^0.1.2",
+    "replace-ext": "^1.0.0",
     "through2": "^2.0.3"
   },
   "devDependencies": {
     "mocha": "^4.0.0",
-    "should": "^13.0.0"
+    "should": "^13.0.0",
+    "vinyl": "^2.1.0"
   },
   "engines": {
     "npm": ">=1.2.10"
