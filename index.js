@@ -58,7 +58,7 @@ module.exports = function (view, options, partials) {
         }
 
         try {
-            file.contents = new Buffer(
+            file.contents = Buffer.from(
                 mustache.render(template, file.data || view, partials)
             );
         } catch (e) {
