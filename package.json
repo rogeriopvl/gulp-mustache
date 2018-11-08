@@ -20,7 +20,9 @@
     "url": "git://github.com/rogeriopvl/gulp-mustache.git"
   },
   "scripts": {
-    "test": "mocha"
+    "lint": "eslint .",
+    "lint:fix": "prettier --write **/*",
+    "test": "npm run lint && mocha"
   },
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
@@ -30,7 +32,14 @@
     "through2": "^3.0.0"
   },
   "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "mocha": "^5.0.0",
+    "prettier": "^1.15.1",
     "should": "^13.2.3",
     "vinyl": "^2.2.0"
   },
