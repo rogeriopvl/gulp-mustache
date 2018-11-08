@@ -21,7 +21,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "lint:fix": "prettier --write .",
+    "lint:fix": "prettier --write **/*",
     "test": "npm run lint && mocha"
   },
   "dependencies": {
