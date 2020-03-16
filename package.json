@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "escape-string-regexp": "^2.0.0",
-    "mustache": "^3.0.1",
+    "mustache": "^4.0.1",
     "plugin-error": "^1.0.0",
     "replace-ext": "^1.0.0",
     "through2": "^3.0.1"
